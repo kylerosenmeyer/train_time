@@ -11,7 +11,7 @@ regarding the project.
 
 More information:
 
-See the [Live Project Here.](https://kylerosenmeyer.github.io/train-time/)
+See the [Live Project Here.](https://kylerosenmeyer.github.io/train_time/)
 
 See [Under the Hood Here.](https://github.com/kylerosenmeyer/train_time)
 
