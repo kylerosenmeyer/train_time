@@ -1,0 +1,28 @@
+body {
+    text-align:left;
+}
+
+.form-control {
+    width: 100%;
+}
+
+.main-container {
+    background-color: lightgray;
+    padding: 2%;
+
+}
+
+.btn-primary {
+    width: 20%;
+    float: right;
+    margin-top: 3%;
+    background-color: lightgray;
+    border: 2px solid darkgray;
+    color: black;
+}
+
+.btn-primary:hover {
+    background-color: darkgray;
+    border: 2px solid lightgray;
+    color: whitesmoke;
+}
