@@ -1,28 +1,146 @@
+/* Style the body with font, text alignment, and the white brick background image from Subtle Patterns*/
 body {
     text-align:left;
+    font-family: 'Fjalla One', sans-serif;
+    background-image: url("../images/brickwall_@2X.png");
+
 }
+
+/* Fade the table in on page load. */
+
+table {
+    animation-name: tableFade;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+/* Set the red brick background on the jumbo and give it a border and shadow. */
+
+.jumbotron-fluid {
+    background-image: url("../images/brickwall.jpg");
+    border-bottom: 4px outset rgba(27, 5, 5, 0.4);
+    box-shadow: 0px 4px 6px 6px rgba(27, 5, 5, 0.6);
+}
+
+/* Jumbo font white */
+
+.display-3, .lead, #smallText {
+    color: rgba(241, 241, 241, 0.95);
+}
+
+/* Remove default table borders */
+
+.table th, .table td {
+    border-top: none;
+}
+
+/* Add border to table head row */
+
+.table thead th {
+    border-bottom: 2px solid darkgrey;
+}
+
+/* Fade in new table rows as they are added. */
+
+tr {
+    animation-name: tableFade;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+/* Change font type for sections with .text class */
+
+.text {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Make form fields full width and give it some border changes */
 
 .form-control {
     width: 100%;
+    border: 3px inset darkgrey;
+    border-radius: none;
 }
+
+/* Give the Add Train form some styling */
 
 .main-container {
-    background-color: lightgray;
     padding: 2%;
+    margin: 1% 5% 5%;
 
 }
+
+/* Give the Train Table some more styling. */
+
+.table {
+    margin: 5% 5% 1%;
+    width: 90%;
+}
+
+/* Remove the dumb blue outline/border/glow whatever from the input fields. */
+
+input:focus, .form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border: 3px inset darkgrey;
+    border-radius: none;
+}
+
+/* Style the Add Train button */
 
 .btn-primary {
-    width: 20%;
-    float: right;
+    width: 30%;
     margin-top: 3%;
-    background-color: lightgray;
-    border: 2px solid darkgray;
+    padding: 1% 0%;
+    float: left;
+    background-color: rgba(27, 5, 5, 0);
+    border: 2px solid rgba(27, 5, 5, 0.6);
     color: black;
+    font-size: 1.5em;
 }
 
+/* Give the Add Train button a different style on hover */
+
 .btn-primary:hover {
-    background-color: darkgray;
-    border: 2px solid lightgray;
-    color: whitesmoke;
+    background-image: url("../images/brickwall.jpg");
+    background-color: rgba(27, 5, 5, 0);
+    border: 2px solid rgba(27, 5, 5, 0.6);
+    color: rgba(241, 241, 241, 0.95);
 }
+
+/* Remove the dumb blue outline/border/glow whatever from the buttons. */
+
+.btn-primary:focus, .btn-primary:active, .btn:active, button:active {
+    outline: none;
+    box-shadow: none;
+    border: 2px solid rgba(27, 5, 5, 0.6);
+    border-radius: none;
+}
+
+/* This is the table fade animation */
+
+@keyframes tableFade {
+    0% {opacity: 0;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+/* Style the Modal */
+
+#warningModal {
+    top: 50%;
+    margin: auto;
+}
+
+/*Modal Styling Fix. I did not write this code. Source: https://github.com/shlomiassaf/ngx-modialog/issues/280 */
+.fade.in {
+    opacity: 1;
+}
+.modal.in .modal-dialog {
+    -webkit-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    transform: translate(0, 0);
+}
+.modal-backdrop.in {
+    opacity: 0.5;
+}
+

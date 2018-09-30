@@ -1,4 +1,4 @@
-//Train Time
+//Train Time Application
 
 // Initialize Firebase
 var config = {
@@ -12,151 +12,108 @@ var config = {
 
 firebase.initializeApp(config);
 
+//Define initial variables. Set the database variable to more easily call things from/to firebase, define trainCount, and set empty variables for time caclulations. 
+
 var database = firebase.database(),
-    currentTime = moment(),
-    trainCount = 4,
+    trainCount = 1,
     timeNext = "",
     minsAway = "";
 
-console.log("this is the traincount: " + trainCount)
-
-
-var trainSetup = {
-  
-  train1: {
-    trainName: "Florida Express",
-    trainDest: "Jacksonville",
-    trainFreq: 30,
-    trainStart: "07:45"
-  },
-
-  train2: {
-    trainName: "DC to NYC",
-    trainDest: "New York City",
-    trainFreq: 120,
-    trainStart: "05:00"
-  },
-
-  train3: {
-    trainName: "Georgia Line",
-    trainDest: "Atlanta",
-    trainFreq: 60,
-    trainStart: "09:00"
-  },
-
-  train4: {
-    trainName: "Walt Disney Monorail",
-    trainDest: "Orlando",
-    trainFreq: 15,
-    trainStart: "04:30"
-  }
-
-};
+// When the page loads, check one time for anything in the database, if nothing is there, put a sample train in.
 
 $(document).ready( function() {
 
-  $("#trainName, #trainDest, #trainFreq").empty();
+  database.ref().once("value", function(snap) {
 
-  for ( let i=1; i<5; i++ ) {
+    //This is the condition to check if anything exists in the database. the var "newTrain" is a sample train to plug in.
 
-        
-        //timeF is the time train frequency
-    var timeF = trainSetup["train" + i]["trainFreq"],
-        //tTime1 is the time the first train leaves
-        time1 = moment(trainSetup["train" + i]["trainStart"], "HH:mm").subtract(1, "years"),
-        //tDiff is the time between now and when the first train left
-        tDiff = moment().diff(moment(time1, "minutes")),
-        //tLeft is the remainder of the current trip that has not yet passed. 
-        tLeft = timeF - tDiff % timeF
-        //tTime2 is the time of the next train
-        time2 = moment().add(tLeft, "minutes").format("HH:mm"),
-        
-
-        //The following variables represent the new row and data entries to be added to the table.
-        trainRow = $("<tr id=\"trainRow" + i + "\">"),
-        tScope = $("<td scope=\"row\"></td>"),
-        tName = $("<td>"+trainSetup["train" + i]["trainName"]+"</td>"),
-        tDest = $("<td>"+trainSetup["train" + i]["trainDest"]+"</td>"),
-        tFreq = $("<td>"+trainSetup["train" + i]["trainFreq"]+" minutes</td>"),
-        tNext = $("<td>" + time2 + " </td>"),
-        tMinAway = $("<td>" + tLeft + " minutes</td>")
-  
-    // console.log("timeF (" + i + "): " + timeF)
-    // console.log("time1 (" + i + "): " + time1)
-    // console.log("tDiff (" + i + "): " + tDiff)
-    // console.log("tLeft (" + i + "): " + tLeft)
-    // console.log("time2 (" + i + "): " + time2)
+    if ( snap.exists() == false ) {
+      var newTrain = {
+        trainName: "Florida Express",
+        trainDest: "Jacksonville",
+        trainFreq: 30,
+        trainStart: "07:45",
+        trainCount: trainCount
+      } 
     
-    $(".trainTable").append(trainRow)
-    $("#trainRow"+i).append(tScope, tName, tDest, tFreq, tNext, tMinAway)
+      database.ref().push(newTrain)
 
-    database.ref().on("value", function(snap) {
-      trainCount = snap.val().trainCount
-    })
-  }
+    }
+  })
+
+  $(".main-container").slideUp(0)
+  $(".main-container").delay(4000).slideDown(2000)
 })
+
+//When the submit button is clicked, push the new train into firebase
 
 $(".btn-primary").click( function() {
 
   event.preventDefault()
 
-  trainCount++
+  if ( ( $("#inputName").val() !== "" ) && ( $("#inputDest").val() !== "" ) && ( $("#inputFreq").val() !== 0 ) && ( $("#inputStart").val() !== "" ) ) {
+    trainCount++
 
-  var newTrain = {
-      trainName: $("#inputName").val().trim(),
-      trainDest: $("#inputDest").val().trim(),
-      trainFreq: $("#inputFreq").val().trim(),
-      trainFirst: $("#inputStart").val().trim()
+    // Here, after the condition is checked that all the form fields have something in them.
+    var newTrain = {
+        trainName: $("#inputName").val().trim(),
+        trainDest: $("#inputDest").val().trim(),
+        trainFreq: $("#inputFreq").val().trim(),
+        trainStart: $("#inputStart").val().trim(),
+        trainCount: trainCount
+    } 
+    //Put the new train into the database
+    database.ref().push(newTrain)
+  } else {
+    //Display the modal warning the user that the train info is incomplete.
+    $("#warningModal").modal("toggle")
   }
-
-  console.log("New Train Created: ")
-  console.log(newTrain.trainName)
-  console.log(newTrain.trainDest)
-  console.log(newTrain.trainFreq)
-  console.log(newTrain.trainFirst)
-
-  database.ref().push(newTrain)
-  database.ref().push({trainCount: trainCount})
-  
-  console.log("this is the train count: " + trainCount)
+  //Reset the form (vanilla javascript)
+  document.getElementById("trainForm").reset()
 
 })
 
+//Whenever a child is recognized in firebase, it will display in the train table.
+//This applies to new trains added by button click, existing trains in the database, or the sample train being added to the database.
+
 database.ref().on("child_added", function(snap) {
 
-  console.log("New Train Added from Firebase: ")
-  console.log("this is the new train coming in: ")
-  console.log(snap.val().trainName)
-  console.log(snap.val().trainDest)
-  console.log(snap.val().trainFreq)
-  console.log(snap.val().trainFirst)
+    //This section construct the table row/data entries. trainRow, tName, tDest, tFreq, tScope, tNext, and tMinAway are all entries to the table.
+    //This is also recognized by the <tr> or <td> tags in these variables.
+    //timeF, time1, tDiff, tLeft, and time2 are all variables related to time calculations.
 
-    //These are the variables used again to build the table entries and do the time calculations.
-
-  var trainRow = $("<tr id=\"trainRow"+trainCount+"\">"),
-    tName = $("<td>"+snap.val().trainName+"</td>"),
-    tDest = $("<td>"+snap.val().trainDest+"</td>"),
-    tFreq = $("<td>"+snap.val().trainFreq+" minutes</td>"),
-    tScope = $("<td scope=\"row\"></td>"),
+  let trainRow = $("<tr id=\"trainRow"+trainCount+"\">"),
+    tName = $("<td class=\"text\">"+snap.val().trainName+"</td>"),
+    tDest = $("<td class=\"text\">"+snap.val().trainDest+"</td>"),
+    tFreq = $("<td class=\"text\">"+snap.val().trainFreq+" minutes</td>"),
+    tScope = $("<td class=\"text\" scope=\"row\"></td>"),
     //timeF is the time train frequency
     timeF = snap.val().trainFreq,
-    //tTime1 is the time the first train leaves
-    time1 = moment(snap.val().trainFirst, "HH:mm").subtract(1, "years"),
+    //time1 is the time the first train leaves
+    time1 = moment(snap.val().trainStart, "HH:mm").subtract(1, "years"),
     //tDiff is the time between now and when the first train left
     tDiff = moment().diff(moment(time1, "minutes")),
     //tLeft is the remainder of the current trip that has not yet passed. 
     tLeft = timeF - tDiff % timeF
-    //tTime2 is the time of the next train
+    //time2 is the time of the next train
     time2 = moment().add(tLeft, "minutes").format("HH:mm"),
     //After computing the times for the new train, add those values to the table
-    tNext = $("<td>" + time2 + " </td>"),
-    tMinAway = $("<td>" + tLeft + " minutes</td>")
-      
-  $(".trainTable").append(trainRow)
-  $("#trainRow"+trainCount).append(tScope, tName, tDest, tFreq, tNext, tMinAway)
+    tNext = $("<td class=\"text time\">" + time2 + " </td>"),
+    tMinAway = $("<td class=\"text time\">" + tLeft + " minutes</td>")
   
+  //Build the completed train row.
+  trainRow.append(tScope, tName, tDest, tFreq, tNext, tMinAway)
+  //Append the new trainRow to the table.
+  $("tbody").append(trainRow)
+  //Update the value of trainCount
+  trainCount = snap.val().trainCount
 
+}, function(errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+});
+
+//This code snippet focuses onto the modal when it displays (taken from bootstrap documentation)
+$('#warningModal').on('shown.bs.modal', function () {
+  $('#warningModal').trigger('focus')
 })
-
-
 

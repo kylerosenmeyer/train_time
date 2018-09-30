@@ -7,24 +7,27 @@
     <title>Train Time</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../train_time/assets/css/reset.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="../train_time/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One|Montserrat" rel="stylesheet">
+
     
 
 </head>
 <body>
-    
+    <!--This is the header section of the page-->
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-3">Master Train Scheduler</h1>
+            <h1 class="display-3">MASTER TRAIN SCHEDULER</h1>
             <p class="lead">If you've ever missed a train, you need this.</p>
             <hr class="my-2">
-            <p>See current train information, and add new trains that you want to track.</p>
+            <p class="text" id="smallText">See current train information, and add new trains that you want to track.</p>
     
         </div>
     </div>
 
-    <table class="table">
+    <!--This is the table section displaying all of the trains-->
+    <table class="table tableBorder">
         <thead>
             <tr>
                 <th>Train Schedule</th>
@@ -35,62 +38,84 @@
                 <th>Minutes Away</th>
             </tr>
         </thead>
+        
         <tbody class="trainTable">
-            
+        <!--The contents of the trainTable are generated from firebase-->
         </tbody>
     </table>
 
+    <!--This is the modal that pops if you don't fill out the form all the way-->
+    <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wait!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    We do not have enough information about the new train.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--This is the Add Train section to input new trains-->
     <div class="container main-container">
-        <form>
+        <form id="trainForm">
             <fieldset class="form-group row">
-                <legend class="col-form-legend col-sm-1-12">Add a New Train</legend>
-                <div class="col-sm-1-12">
+                <legend class="col-form-legend col-12">ADD A NEW TRAIN</legend>
+                <div class="col-12">
                     
                 </div>
             </fieldset>
             <div class="form-group row">
                 <p class="col-12 col-form-label">Train Name</p>
                 <div class="col-12">
-                    <input type="text" class="form-control" name="inputName" id="inputName" placeholder="New Train">
+                    <input type="text" class="form-control text" name="inputName" id="inputName" placeholder="New Train">
                 </div>
             </div>
             <div class="form-group row">
                 <p class="col-12 col-form-label">Destination</p>
                 <div class="col-12">
-                    <input type="text" class="form-control" name="inputPlace" id="inputDest" placeholder="Miami, FL">
+                    <input type="text" class="form-control text" name="inputPlace" id="inputDest" placeholder="Miami, FL">
                 </div>
             </div>
             <div class="form-group row">
                 <p class="col-12 col-form-label">Frequency (In Minutes)</p>
                 <div class="col-12">
-                    <input type="number" class="form-control" name="inputTime" id="inputFreq" placeholder="30">
+                    <input type="number" class="form-control text" name="inputTime" id="inputFreq" placeholder="30">
                 </div>
             </div>
             <div class="form-group row">
                 <p class="col-12 col-form-label">First Train Time (HH:MM Military Time)</p>
                 <div class="col-12">
-                    <input type="text" class="form-control" name="inputTime" id="inputStart" placeholder="HH:mm">
+                    <input type="text" class="form-control text" name="inputTime" id="inputStart" placeholder="HH:mm">
                 </div>
             </div>
 
             <div class="form-group row">
-                <div class="offset-sm-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary">Add Train</button>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary" >Add Train</button>
                 </div>
             </div>
         </form>
     </div>
 
+    
 
+    <!--Script section to connect Firebase, JQuery, Moment.js, and the local javascript file.-->
     
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
     <script src="../train_time/assets/javascript/app.js"></script>
-    
-    
-    
-    
 
+    
 </body>
 </html>
