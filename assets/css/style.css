@@ -127,7 +127,7 @@ input:focus, .form-control:focus {
 /* Style the Modal */
 
 #warningModal {
-    top: 50%;
+    top: 20%;
     margin: auto;
 }
 
